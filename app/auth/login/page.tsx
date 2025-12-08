@@ -1,6 +1,6 @@
 "use client"
 
-import { signUpSchema } from "@/app/schemas/auth";
+import { loginSchema, signUpSchema } from "@/app/schemas/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -14,30 +14,29 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod"
 
-export default function SignUpPage() {
+export default function LoginPage() {
 
     const[isPending, startTransition] = useTransition();
     const router = useRouter()
 
+
     const form = useForm({
-        resolver: zodResolver(signUpSchema),
+        resolver: zodResolver(loginSchema),
         defaultValues : {
             email : "",
-            name : "",
             password : "",
         }
     })
 
-    async function onSubmit(data: z.infer<typeof signUpSchema>) {
+    function onSubmit(data: z.infer<typeof loginSchema>) {
 
-        startTransition(async ()=> {
-            authClient.signUp.email({
+        startTransition(async () => {
+            await authClient.signIn.email({
                 email: data.email,
-                name: data.name,
                 password: data.password,
                 fetchOptions: {
                     onSuccess: () => {
-                        toast.success("Accounted created sucessfully")
+                        toast.success("Logged in sucessfully")
                         router.push("/")
                     },
                     onError: (error) => {
@@ -49,28 +48,17 @@ export default function SignUpPage() {
         
     }
 
+
+
     return (
-        <Card>
+        <Card> 
             <CardHeader>
-                <CardTitle>Sign Up</CardTitle>
-                <CardDescription>Create an account to get started</CardDescription>
+                <CardTitle>Login In</CardTitle>
+                <CardDescription>Login in to get started</CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <FieldGroup className="gap-y-4">
-                        <Controller 
-                            name="name"
-                            control={form.control} 
-                            render={({field, fieldState}) => (
-                                <Field>
-                                    <FieldLabel>Full name</FieldLabel>
-                                    <Input aria-invalid={fieldState.invalid} 
-                                            placeholder="John Doe" {...field}/>
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]}/>
-                                    )}
-                                </Field>
-                            )}/>
                         <Controller 
                             name="email"
                             control={form.control} 
@@ -107,7 +95,7 @@ export default function SignUpPage() {
                                     <span>Loading</span>
                                 </>
                             ) : (
-                                <span>Signed In</span>
+                                <span>Logged in</span>
                             )}
                         </Button>
                     </FieldGroup>
