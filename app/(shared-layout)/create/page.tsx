@@ -13,15 +13,16 @@ import { Controller, useForm } from "react-hook-form";
 
 import z from "zod"
 
-export default function CreateDefault() {   
+export default function CreateDefault() {
 
-    const[isPending, startTransition] = useTransition();
-    
+    const [isPending, startTransition] = useTransition();
+
     const form = useForm({
         resolver: zodResolver(postSchema),
-        defaultValues : {
+        defaultValues: {
             content: "",
-            title: ""
+            title: "",
+            image: undefined
         }
     })
 
@@ -32,11 +33,11 @@ export default function CreateDefault() {
             console.log(postSchema)
 
             await createBlogAction(values)
-         })
+        })
 
     }
 
-    return(
+    return (
         <div className="py-12">
             <div className="text-center mb-12">
                 <h1 className="text-4xl font-extrabold  tracking-tight sm:text-5xl">Create post</h1>
@@ -52,42 +53,62 @@ export default function CreateDefault() {
                 <CardContent>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <FieldGroup className="gap-y-4">
-                            <Controller 
-                            name="title"
-                            control={form.control} 
-                            render={({field, fieldState}) => (
-                                <Field>
-                                    <FieldLabel>Title</FieldLabel>
-                                    <Input aria-invalid={fieldState.invalid} 
-                                            placeholder="super cool title"{...field}/>
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]}/>
-                                    )}
-                                </Field>
-                            )}/>
-                            <Controller 
-                            name="content"
-                            control={form.control} 
-                            render={({field, fieldState}) => (
-                                <Field>
-                                    <FieldLabel>Content</FieldLabel>
-                                    <Textarea aria-invalid={fieldState.invalid} 
-                                            placeholder="super cool blog content"{...field}/>
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]}/>
-                                    )}
-                                </Field>
-                            )}/>
+                            <Controller
+                                name="title"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field>
+                                        <FieldLabel>Title</FieldLabel>
+                                        <Input aria-invalid={fieldState.invalid}
+                                            placeholder="super cool title"{...field} />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} />
+                                        )}
+                                    </Field>
+                                )} />
+                            <Controller
+                                name="content"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field>
+                                        <FieldLabel>Content</FieldLabel>
+                                        <Textarea aria-invalid={fieldState.invalid}
+                                            placeholder="super cool blog content"{...field} />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} />
+                                        )}
+                                    </Field>
+                                )} />
+                            <Controller
+                                name="image"
+                                control={form.control}
+                                render={({ field, fieldState }) => (
+                                    <Field>
+                                        <FieldLabel>Image</FieldLabel>
+                                        <Input aria-invalid={fieldState.invalid}
+                                            placeholder="super cool blog content"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(event) => {
+                                                const file = event.target.files?.[0]
+                                                field.onChange(file)
+                                            }}
+                                        />
+                                        {fieldState.invalid && (
+                                            <FieldError errors={[fieldState.error]} />
+                                        )}
+                                    </Field>
+                                )} />
                             <Button disabled={isPending}>
-                            {isPending ? (
-                                <>
-                                    <Loader2 className="size-4 animate-spin"/>
-                                    <span>Loading</span>
-                                </>
-                            ) : (
-                                <span>Create Post</span>
-                            )}
-                        </Button>
+                                {isPending ? (
+                                    <>
+                                        <Loader2 className="size-4 animate-spin" />
+                                        <span>Loading</span>
+                                    </>
+                                ) : (
+                                    <span>Create Post</span>
+                                )}
+                            </Button>
                         </FieldGroup>
                     </form>
                 </CardContent>

@@ -9,8 +9,19 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
         port: ""
       },
+      {
+        hostname: "upbeat-chipmunk-985.convex.cloud",
+        port: "",
+        protocol: "https",
+      }
     ],
-  }
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "5mb",
+    },
+  },
+
 };
 
 export default nextConfig;
