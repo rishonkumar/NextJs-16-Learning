@@ -8,13 +8,13 @@ export const createPost = mutation({
     //only auth user can do this operation
     const user = await authComponent.safeGetAuthUser(ctx)
 
-    if(!user) {
-        throw new ConvexError("No Authenticated")
+    if (!user) {
+      throw new ConvexError("No Authenticated")
     }
     const blogArticle = await ctx.db.insert('posts', {
-        body: args.body,
-        title: args.body,
-        authorId: user._id,
+      body: args.body,
+      title: args.body,
+      authorId: user._id,
     })
     return blogArticle;
   },

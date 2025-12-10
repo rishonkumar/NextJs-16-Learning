@@ -1,29 +1,22 @@
 "use client"
+import { createBlogAction } from "@/app/action";
 import { postSchema } from "@/app/schemas/blog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { api } from "@/convex/_generated/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "convex/react";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 import z from "zod"
 
 export default function CreateDefault() {   
 
     const[isPending, startTransition] = useTransition();
-    const router = useRouter();
-
-    //calling the end point
-    const mutation = useMutation(api.post.createPost)
-
+    
     const form = useForm({
         resolver: zodResolver(postSchema),
         defaultValues : {
@@ -35,20 +28,12 @@ export default function CreateDefault() {
     //here we are passing postSchema
     function onSubmit(values: z.infer<typeof postSchema>) {
 
-        startTransition(() => {
+        startTransition(async () => {
             console.log(postSchema)
 
-        //calling our backend (mutation) from client
-            mutation({
-                body: values.content,
-                title: values.title,
-            })
+            await createBlogAction(values)
+         })
 
-            toast.success('Everything was fine')
-
-            router.push('/')
-        })
-        
     }
 
     return(
