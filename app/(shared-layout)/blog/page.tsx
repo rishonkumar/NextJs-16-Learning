@@ -1,15 +1,15 @@
-"use client"
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import { fetchQuery } from "convex/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function BlogPage() {
+export default async function BlogPage() {
 
-    // we will use useQuery to get the data not mutation
-    const data = useQuery(api.post.getPosts)
+    const data = await fetchQuery(api.post.getPosts)
+
+
     return (
         <div className="py-12">
             {/* {JSON.stringify(data)} */}
