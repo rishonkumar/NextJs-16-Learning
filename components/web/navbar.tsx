@@ -8,33 +8,33 @@ import { toast } from "sonner";
 import { error } from "console";
 import { useRouter } from "next/navigation";
 
-export function NavBar() {  
+export function NavBar() {
 
-    const{isAuthenticated, isLoading} = useConvexAuth()
+    const { isAuthenticated, isLoading } = useConvexAuth()
     const router = useRouter()
 
     return (
         <nav className="w-full py-5 flex items-center justify-between">
             <div className="flex items-center gap-8">
                 <Link href="/">
-                    <h1 className="text-3xl font-bold">Next<span className="text-blue-500">Pro</span></h1>
+                    <h1 className="text-3xl font-bold">Next<span className="text-primary">Pro</span></h1>
                 </Link>
 
                 <div className="flex items-center gap-2">
-                    <Link className={buttonVariants({variant:"ghost"})} href="/">
+                    <Link className={buttonVariants({ variant: "ghost" })} href="/">
                         HOME
                     </Link>
-                    <Link className={buttonVariants({variant:"ghost"})} href="/blog">
+                    <Link className={buttonVariants({ variant: "ghost" })} href="/blog">
                         BLOG
                     </Link>
-                    <Link className={buttonVariants({variant:"ghost"})} href="/create">
+                    <Link className={buttonVariants({ variant: "ghost" })} href="/create">
                         Create
                     </Link>
                 </div>
             </div>
 
             <div className="flex items-center gap-2">
-            {isLoading ? null : isAuthenticated ? (
+                {isLoading ? null : isAuthenticated ? (
                     <Button onClick={() => authClient.signOut({
                         fetchOptions: {
                             onSuccess: () => {
@@ -51,7 +51,7 @@ export function NavBar() {
                 ) : (
                     <>
                         <Link className={buttonVariants()} href="/auth/sign-up">Sign Up</Link>
-                        <Link className={buttonVariants({variant: "secondary"})} href="/auth/login">Login</Link>
+                        <Link className={buttonVariants({ variant: "secondary" })} href="/auth/login">Login</Link>
                     </>
                 )}
                 <ThemeToggle />
