@@ -5,6 +5,7 @@ import z from "zod";
 import { api } from "@/convex/_generated/api";
 import { redirect } from "next/navigation";
 import { getToken } from "@/lib/auth-server";
+import { revalidatePath } from "next/cache";
 // this is server side using convex in server side 
 export async function createBlogAction(values: z.infer<typeof postSchema>) {
 
@@ -47,6 +48,10 @@ export async function createBlogAction(values: z.infer<typeof postSchema>) {
             error: "Failed to create post"
         }
     }
+
+    //This function allows you to purge cached data on-demand for a specific path.
+    // this will be updated instantly as we used reValidatePath function
+    revalidatePath('/blog')
     //whenever we in server side we will not use useRouter we will use Redirect
     return redirect("/")
 }
