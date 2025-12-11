@@ -7,6 +7,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
+
+// Incase of dynamic data the page will be refreshed after 30 seconds since it is not static page
+export const revalidate = 30
+
 export default function BlogPage() {
 
 
